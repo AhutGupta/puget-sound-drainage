@@ -7,12 +7,11 @@ from pathlib import Path
 import geopandas as gpd
 import folium
 from folium import plugins
-import json
 
 # Import config
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
-from config import SALISH_SEA_BOUNDS, MAP_STYLE, WEB_CONFIG
+from config import SALISH_SEA_BOUNDS, MAP_STYLE, WEB_CONFIG, POPULATION_CONFIG
 
 # Setup paths
 BASE_DIR = Path(__file__).parent.parent
@@ -32,9 +31,6 @@ def create_base_map():
         tiles='OpenStreetMap',
         control_scale=True
     )
-    
-    # Add layer control
-    folium.LayerControl(position='topright').add_to(m)
     
     return m
 
@@ -182,6 +178,71 @@ def add_point_layer(m, filename, layer_name, color):
         print(f"  -> Error adding {layer_name}: {e}")
 
 
+def add_populated_places_layer(m, filename, layer_name, color):
+    """Add populated places with labels to the map"""
+    print(f"Adding {layer_name} layer...")
+    
+    try:
+        filepath = DATA_PROCESSED_DIR / filename
+        
+        if not filepath.exists():
+            print(f"  -> File not found: {filename}")
+            return
+        
+        gdf = gpd.read_file(filepath)
+        
+        if len(gdf) == 0:
+            print(f"  -> No features in {filename}")
+            return
+        
+        # Create feature group
+        feature_group = folium.FeatureGroup(name=layer_name, show=True)
+        
+        # Add markers with labels
+        for idx, row in gdf.iterrows():
+            name = row.get('name', 'Unknown')
+            popup_text = f"<b>{name}</b>"
+            
+            if 'population' in row and row['population']:
+                pop = int(row['population'])
+                popup_text += f"<br>Population: {pop:,}"
+            
+            if 'country' in row and row['country']:
+                popup_text += f"<br>Country: {row['country']}"
+            
+            # Size marker based on population
+            if 'population' in row and row['population']:
+                pop = int(row['population'])
+                if pop > 500000:
+                    radius = 10
+                elif pop > 100000:
+                    radius = 7
+                else:
+                    radius = 5
+            else:
+                radius = 5
+            
+            # Add circle marker
+            folium.CircleMarker(
+                location=[row.geometry.y, row.geometry.x],
+                radius=radius,
+                popup=popup_text,
+                tooltip=name if POPULATION_CONFIG['label_places'] else None,
+                color=color,
+                fill=True,
+                fillColor=color,
+                fillOpacity=0.8,
+                weight=2
+            ).add_to(feature_group)
+        
+        feature_group.add_to(m)
+        
+        print(f"  -> Added {len(gdf)} {layer_name} features")
+        
+    except Exception as e:
+        print(f"  -> Error adding {layer_name}: {e}")
+
+
 def add_title_and_legend(m):
     """Add title and legend to the map"""
     
@@ -225,6 +286,10 @@ def add_title_and_legend(m):
             Mountain Peaks
         </p>
         <p style="margin: 5px 0;">
+            <i style="background:{MAP_STYLE['city_color']}; width: 20px; height: 10px; display: inline-block;"></i>
+            Cities & Towns (pop &gt; 10K)
+        </p>
+        <p style="margin: 5px 0;">
             <i style="background:{MAP_STYLE['grey_border']}; width: 20px; height: 10px; display: inline-block; opacity: 0.3;"></i>
             Surrounding Areas
         </p>
@@ -251,6 +316,7 @@ def create_2d_map():
     add_geojson_layer(m, 'osm_waterways.geojson', 'Streams & Waterways', MAP_STYLE['river_color'])
     add_geojson_layer(m, 'osm_forests.geojson', 'Forests', MAP_STYLE['forest_color'])
     add_point_layer(m, 'osm_peaks.geojson', 'Mountain Peaks', MAP_STYLE['mountain_color'])
+    add_populated_places_layer(m, 'populated_places.geojson', 'Populated Places', MAP_STYLE['city_color'])
     
     # Add title and legend
     add_title_and_legend(m)
@@ -261,6 +327,9 @@ def create_2d_map():
     # Add minimap
     minimap = plugins.MiniMap(toggle_display=True)
     m.add_child(minimap)
+    
+    # Add layer control (must be added after all layers are added)
+    folium.LayerControl(position='topright').add_to(m)
     
     # Save map
     output_file = WEB_DIR / 'map_2d.html'

@@ -131,8 +131,10 @@ puget-sound-drainage/
 - **Source:** https://www.usgs.gov/national-hydrography
 
 ### Elevation Data
-- **SRTM:** Shuttle Radar Topography Mission (90m resolution)
-- **Source:** https://srtm.csi.cgiar.org/
+
+- **Current status:** The 3D visualization script (`src/visualize_3d.py`) currently uses synthetic terrain for demonstration purposes and does **not** load real DEM tiles.
+- **Planned:** Integration with real elevation datasets (e.g., SRTM – Shuttle Radar Topography Mission, ~90m resolution) is planned but **not yet implemented** in this repository.
+- **Reference source:** https://srtm.csi.cgiar.org/
 
 ## 🛠️ Technologies
 

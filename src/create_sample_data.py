@@ -196,6 +196,92 @@ def create_sample_peaks():
     print(f"Created: {output_file}")
 
 
+def create_sample_populated_places():
+    """Create sample populated places data"""
+    places_geojson = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Seattle",
+                    "population": 737015,
+                    "country": "United States"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-122.33, 47.61]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Vancouver",
+                    "population": 675218,
+                    "country": "Canada"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-123.12, 49.28]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Tacoma",
+                    "population": 217827,
+                    "country": "United States"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-122.44, 47.25]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Victoria",
+                    "population": 85792,
+                    "country": "Canada"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-123.37, 48.43]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Bellingham",
+                    "population": 91482,
+                    "country": "United States"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-122.49, 48.75]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Everett",
+                    "population": 110629,
+                    "country": "United States"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-122.20, 47.98]
+                }
+            }
+        ]
+    }
+    
+    output_file = DATA_PROCESSED_DIR / 'populated_places.geojson'
+    with open(output_file, 'w') as f:
+        json.dump(places_geojson, f)
+    print(f"Created: {output_file}")
+
+
 def create_summary():
     """Create data summary"""
     summary = {
@@ -206,7 +292,8 @@ def create_summary():
             {"name": "rivers", "features": 2, "file": "rivers.geojson"},
             {"name": "osm_waterways", "features": 1, "file": "osm_waterways.geojson"},
             {"name": "osm_forests", "features": 2, "file": "osm_forests.geojson"},
-            {"name": "osm_peaks", "features": 3, "file": "osm_peaks.geojson"}
+            {"name": "osm_peaks", "features": 3, "file": "osm_peaks.geojson"},
+            {"name": "populated_places", "features": 6, "file": "populated_places.geojson"}
         ]
     }
     
@@ -229,6 +316,7 @@ def main():
     create_sample_waterways()
     create_sample_forests()
     create_sample_peaks()
+    create_sample_populated_places()
     create_summary()
     
     print("\n" + "=" * 60)

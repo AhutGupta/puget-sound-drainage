@@ -6,13 +6,12 @@ import os
 import json
 from pathlib import Path
 import geopandas as gpd
-from shapely.geometry import shape, Point, LineString, Polygon
-import pandas as pd
+from shapely.geometry import Point, LineString, Polygon
 
 # Import config
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
-from config import SALISH_SEA_BOUNDS, PROCESSING_CONFIG
+from config import SALISH_SEA_BOUNDS, PROCESSING_CONFIG, POPULATION_CONFIG
 
 # Setup paths
 BASE_DIR = Path(__file__).parent.parent
@@ -256,6 +255,63 @@ def process_osm_peaks():
         return None
 
 
+def process_natural_earth_populated_places():
+    """Process Natural Earth populated places data"""
+    print("\n=== Processing Populated Places ===")
+    
+    try:
+        # Find populated places shapefile
+        places_dir = DATA_RAW_DIR / 'natural_earth' / 'populated_places'
+        shp_files = list(places_dir.glob("*.shp"))
+        
+        if not shp_files:
+            print("  -> No populated places shapefiles found")
+            return None
+        
+        # Load and clip to region
+        gdf = gpd.read_file(shp_files[0])
+        bounds = SALISH_SEA_BOUNDS
+        region_box = Polygon([
+            (bounds['min_lon'], bounds['min_lat']),
+            (bounds['max_lon'], bounds['min_lat']),
+            (bounds['max_lon'], bounds['max_lat']),
+            (bounds['min_lon'], bounds['max_lat']),
+            (bounds['min_lon'], bounds['min_lat'])
+        ])
+        
+        gdf = gdf[gdf.geometry.intersects(region_box)]
+        
+        # Filter by population
+        if 'POP_MAX' in gdf.columns:
+            min_pop = POPULATION_CONFIG['min_population']
+            gdf = gdf[gdf['POP_MAX'] >= min_pop]
+        
+        # Keep relevant columns
+        columns_to_keep = ['geometry', 'NAME', 'POP_MAX', 'ADM0NAME']
+        available_columns = [col for col in columns_to_keep if col in gdf.columns]
+        gdf = gdf[available_columns]
+        
+        # Rename for consistency
+        if 'NAME' in gdf.columns:
+            gdf = gdf.rename(columns={'NAME': 'name'})
+        if 'POP_MAX' in gdf.columns:
+            gdf = gdf.rename(columns={'POP_MAX': 'population'})
+        if 'ADM0NAME' in gdf.columns:
+            gdf = gdf.rename(columns={'ADM0NAME': 'country'})
+        
+        # Save processed data
+        output_file = DATA_PROCESSED_DIR / 'populated_places.geojson'
+        gdf.to_file(output_file, driver='GeoJSON')
+        
+        print(f"  -> Processed {len(gdf)} populated places")
+        print(f"  -> Saved to {output_file}")
+        return gdf
+        
+    except Exception as e:
+        print(f"  -> Error: {e}")
+        return None
+
+
 def create_summary():
     """Create a summary of processed data"""
     print("\n=== Creating Data Summary ===")
@@ -298,6 +354,7 @@ def main():
     # Process Natural Earth data
     process_natural_earth_coastlines()
     process_natural_earth_rivers()
+    process_natural_earth_populated_places()
     
     # Process OSM data
     process_osm_waterways()

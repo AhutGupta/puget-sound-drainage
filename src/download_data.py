@@ -180,11 +180,11 @@ def main():
     print("\n" + "=" * 60)
     print("Download Complete!")
     print("=" * 60)
-    print("\nNote: For elevation data, run process_data.py which will")
-    print("automatically download SRTM tiles for the region.")
+    print("\nNote: Elevation data is not automatically downloaded.")
+    print("The 3D visualization uses synthetic terrain for demonstration.")
     print("\nFor USGS NHD data, visit:")
     print("  https://www.usgs.gov/national-hydrography/access-national-hydrography-products")
-    print("  and download HUC-8 watersheets for Puget Sound region")
+    print("  and download HUC-8 watersheds for Puget Sound region")
 
 
 if __name__ == '__main__':

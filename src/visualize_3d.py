@@ -6,14 +6,12 @@ import os
 from pathlib import Path
 import geopandas as gpd
 import plotly.graph_objects as go
-import plotly.express as px
 import numpy as np
-import json
 
 # Import config
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
-from config import SALISH_SEA_BOUNDS, MAP_STYLE, WEB_CONFIG
+from config import SALISH_SEA_BOUNDS, MAP_STYLE
 
 # Setup paths
 BASE_DIR = Path(__file__).parent.parent
@@ -200,7 +198,7 @@ def create_3d_map():
     
     # Add annotation
     fig.add_annotation(
-        text="Note: Elevation data is synthetic for visualization purposes.<br>Use data download scripts to obtain real SRTM elevation data.",
+        text="Note: Terrain elevation is synthetic for demonstration purposes.<br>Real SRTM elevation data integration is not yet implemented.",
         xref="paper", yref="paper",
         x=0.5, y=0.02,
         showarrow=False,

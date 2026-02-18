@@ -44,10 +44,10 @@ Central configuration file containing:
 **Key Variables:**
 ```python
 SALISH_SEA_BOUNDS = {
-    'min_lon': -124.5,
-    'max_lon': -121.5,
-    'min_lat': 46.5,
-    'max_lat': 50.5
+    'min_lon': -125.5,  # Extended west to cover Olympic Peninsula
+    'max_lon': -120.0,  # Extended east to cover Cascade Range
+    'min_lat': 45.5,    # Extended south to cover southern watersheds
+    'max_lat': 51.0     # Extended north to cover Canadian watersheds
 }
 ```
 
