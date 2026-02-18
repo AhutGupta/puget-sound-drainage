@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salish Sea Watershed Interactive Map</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌊 Salish Sea Watershed</h1>
+            <p class="subtitle">Interactive Geospatial Visualization of Puget Sound and Georgia Strait</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>About This Project</h2>
+            <p>
+                This interactive mapping project visualizes the Salish Sea watershed, including Puget Sound,
+                the Georgia Strait, and the surrounding rivers, streams, mountains, and forests. The Salish Sea
+                is a complex inland sea system in the Pacific Northwest, bordered by Washington State and
+                British Columbia.
+            </p>
+            <p>
+                The maps show the drainage basin with colored features for the main region and greyed-out
+                surrounding areas for context. All data comes from open-source public datasets.
+            </p>
+        </section>
+
+        <section class="maps">
+            <h2>View the Maps</h2>
+            
+            <div class="map-cards">
+                <div class="map-card">
+                    <div class="card-icon">🗺️</div>
+                    <h3>2D Interactive Map</h3>
+                    <p>
+                        Explore the Salish Sea region with an interactive 2D map showing coastlines, rivers,
+                        streams, forests, and mountain peaks. Toggle layers on and off, and click features
+                        for more information.
+                    </p>
+                    <a href="map_2d.html" class="btn btn-primary">View 2D Map</a>
+                </div>
+
+                <div class="map-card">
+                    <div class="card-icon">🏔️</div>
+                    <h3>3D Terrain Visualization</h3>
+                    <p>
+                        Experience the topography of the region in 3D! Rotate, zoom, and explore the
+                        terrain with mountains, valleys, and the Salish Sea basin. Interactive 3D view
+                        powered by Plotly.
+                    </p>
+                    <a href="map_3d.html" class="btn btn-primary">View 3D Map</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>Map Features</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <h4>🌊 Salish Sea</h4>
+                    <p>The inland sea including Puget Sound and Georgia Strait</p>
+                </div>
+                <div class="feature">
+                    <h4>🏞️ Rivers & Streams</h4>
+                    <p>Major rivers and tributary streams flowing into the sea</p>
+                </div>
+                <div class="feature">
+                    <h4>🌲 Forests</h4>
+                    <p>Forested areas and natural woodlands in the watershed</p>
+                </div>
+                <div class="feature">
+                    <h4>⛰️ Mountain Peaks</h4>
+                    <p>Notable peaks in the Cascade and Olympic mountain ranges</p>
+                </div>
+                <div class="feature">
+                    <h4>🗺️ Coastlines</h4>
+                    <p>Detailed shoreline features and coastal geography</p>
+                </div>
+                <div class="feature">
+                    <h4>🌐 Open Data</h4>
+                    <p>All data from public sources: Natural Earth, OSM, USGS</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="technical">
+            <h2>Technical Details</h2>
+            <div class="tech-info">
+                <h3>Data Sources</h3>
+                <ul>
+                    <li><strong>Natural Earth Data:</strong> Global physical features (coastlines, rivers, lakes, populated places)</li>
+                    <li><strong>OpenStreetMap:</strong> Detailed waterways, forests, and mountain peaks</li>
+                    <li><strong>USGS NHD:</strong> Referenced for watershed boundaries (manual download)</li>
+                    <li><strong>Elevation:</strong> 3D terrain uses synthetic elevation for demonstration (real SRTM integration planned)</li>
+                </ul>
+
+                <h3>Technologies Used</h3>
+                <ul>
+                    <li><strong>Python:</strong> Data processing and map generation</li>
+                    <li><strong>GeoPandas:</strong> Geospatial data manipulation</li>
+                    <li><strong>Folium:</strong> Interactive 2D web mapping</li>
+                    <li><strong>Plotly:</strong> 3D terrain visualization</li>
+                    <li><strong>GitHub Pages:</strong> Free static site hosting</li>
+                </ul>
+
+                <h3>Project Structure</h3>
+                <pre><code>puget-sound-drainage/
+├── src/
+│   ├── download_data.py      # Download geospatial datasets
+│   ├── process_data.py        # Process and prepare map data
+│   ├── visualize_2d.py        # Generate 2D Folium map
+│   ├── visualize_3d.py        # Generate 3D Plotly map
+│   └── config.py              # Configuration and settings
+├── data/
+│   ├── raw/                   # Downloaded raw data
+│   └── processed/             # Processed GeoJSON files
+├── web/                       # GitHub Pages website
+├── docs/                      # Documentation
+└── requirements.txt           # Python dependencies</code></pre>
+            </div>
+        </section>
+
+        <section class="usage">
+            <h2>How to Use This Project</h2>
+            <ol>
+                <li><strong>Clone the repository:</strong>
+                    <code>git clone https://github.com/AhutGupta/puget-sound-drainage.git</code>
+                </li>
+                <li><strong>Install dependencies:</strong>
+                    <code>pip install -r requirements.txt</code>
+                </li>
+                <li><strong>Download data:</strong>
+                    <code>python src/download_data.py</code>
+                </li>
+                <li><strong>Process data:</strong>
+                    <code>python src/process_data.py</code>
+                </li>
+                <li><strong>Generate maps:</strong>
+                    <code>python src/visualize_2d.py</code>
+                    <code>python src/visualize_3d.py</code>
+                </li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                &copy; 2026 Ahut Gupta | 
+                <a href="https://github.com/AhutGupta/puget-sound-drainage" target="_blank" rel="noopener noreferrer">View on GitHub</a> |
+                Licensed under MIT
+            </p>
+            <p class="small">
+                Data sources: Natural Earth, OpenStreetMap Contributors, USGS
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
