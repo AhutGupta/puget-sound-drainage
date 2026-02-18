@@ -40,7 +40,22 @@ This project creates interactive 2D and 3D maps of the Salish Sea region using o
    pip install -r requirements.txt
    ```
 
-### Usage
+### Quick Demo (2 minutes)
+
+Want to see the project in action immediately? Use sample data:
+
+```bash
+# Generate sample data and maps
+python src/create_sample_data.py
+python src/visualize_2d.py
+python src/visualize_3d.py
+
+# Open web/index.html in your browser
+```
+
+See [QUICKSTART.md](QUICKSTART.md) for more details.
+
+### Full Usage (Real Data)
 
 Follow these steps to generate the maps:
 
